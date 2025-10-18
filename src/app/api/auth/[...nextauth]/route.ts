@@ -1,38 +1,19 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { db } from "@/server/db/db";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import NextAuth, { AuthOptions } from "next-auth";
+import GitlabProvider from "next-auth/providers/gitlab";
 
-const handler = NextAuth({
-  // Configure one or more authentication providers
+export const authOptions: AuthOptions = {
+  adapter: DrizzleAdapter(db),
   providers: [
-    CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        if (!credentials) {
-          return null;
-        }
-        const { username, password } = credentials;
-
-        if (username !== "jokcy" || password !== "123123") {
-          return null;
-        }
-        return {
-          id: "1",
-          name: username,
-          email: `${username}@example.com`,
-        };
-      },
-    }),
-  ],
-  secret: process.env.NEXTAUTH_SECRET,
-});
+    GitlabProvider({
+      clientId:
+      "db168614d580ece3a2e74a98db05e2a81a7b343ab02db6f86be79b631ca64e36",
+      clientSecret:
+      "gloas-c1263fcd9392bc5bd2604749af29bc37c6044c24158cea1612cfccdd550a6345"
+    })
+  ]
+}
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
