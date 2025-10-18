@@ -1,3 +1,4 @@
+import { date } from "drizzle-orm/mysql-core";
 import {
     timestamp,
     pgTable,
@@ -13,6 +14,7 @@ export const users = pgTable("user", {
     email: text("email").notNull(),
     emailVerified: timestamp("emailVerified", { mode: "date" }),
     image: text("image"),
+    // createAt:date("create_at").defaultNow(),
 });
 
 export const accounts = pgTable(
