@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { TRPCError, initTRPC } from "@trpc/server";
 
-export async function creatTRPCContext() {
+export async function createTRPCContext() {
   const session = await getServerSession();
 
   console.log("---->", session);
@@ -11,9 +11,9 @@ export async function creatTRPCContext() {
     session,
   };
 }
-const t = initTRPC.context<typeof creatTRPCContext>().create();
+const t = initTRPC.context<typeof createTRPCContext>().create();
 
-const { router, procedure } = t;
+const { router, procedure, createCallerFactory } = t;
 
 
 // 日志中间件
@@ -56,3 +56,5 @@ export const testRouter = router({
 });
 
 export type TestRouter = typeof testRouter;
+
+export const serverCaller = createCallerFactory(testRouter);

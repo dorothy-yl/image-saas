@@ -1,3 +1,4 @@
+import { getServerSession } from "@/server/auth";
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { NextRequest } from "next/server";
 import { creatTRPCContext, testRouter } from '@/utils/trpc';
